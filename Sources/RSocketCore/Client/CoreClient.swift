@@ -29,7 +29,16 @@ public class CoreClient: Client {
         return channel.close()
     }
     deinit {
+        if #available(iOS 13.0, *) {
+            let c = channel
+            Task{
+                try? await c.close()
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        
         // if chanel is active Need to close channel manually
-        assert(!channel.isActive, "Channel is active close channel manually")
+//        assert(!channel.isActive, "Channel is active close channel manually")
     }
 }
